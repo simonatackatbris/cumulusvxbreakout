@@ -3,6 +3,7 @@ import netifaces
 portinfo=dict()
 maxport = 0
 commandstorun=[]
+explain=[]
 with open("/etc/cumulus/ports.conf") as f:
 	for line in f:
 		line=line.rstrip('\n')
@@ -35,21 +36,25 @@ for key in portinfo:
 			commandstorun.append(command)
 			command='ip link set ' + portn + ' name ' + portn + 's0'
 			commandstorun.append(command)
+			explain.append("Port " + portn + " is now " + portn + 's0')
 			offset=((key - 1) *3 ) + offsetstart
 			command='ip link set swp' + str(offset) + ' down'
 			commandstorun.append(command)
 			command='ip link set swp' + str(offset) + ' name ' + portn + 's1'
 			commandstorun.append(command)
+			explain.append("Port " + str(offset) + " is now " + portn + 's1')
 			offset=offset+1
 			command='ip link set swp' + str(offset) + ' down'
 			commandstorun.append(command)
 			command='ip link set swp' + str(offset) + ' name ' + portn + 's2'
 			commandstorun.append(command)
+			explain.append("Port " + str(offset) + " is now " + portn + 's2')
 			offset=offset+1
 			command='ip link set swp' + str(offset) + ' down'
 			commandstorun.append(command)
 			command='ip link set swp' + str(offset) + ' name ' + portn + 's3'
 			commandstorun.append(command)
+			explain.append("Port " + str(offset) + " is now " + portn + 's3')
 			x=1
 	else:
 		# not split
@@ -81,7 +86,13 @@ for key in portinfo:
 		
 for a in commandstorun:
 	print('sudo ' + a)
-	
+
+print(' ')
+print(' explaination ')
+for a in explain:
+	print('' + a)
+
+
 #print(commandstorun)
 
 
